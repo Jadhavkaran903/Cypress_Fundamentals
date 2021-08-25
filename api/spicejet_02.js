@@ -1,73 +1,39 @@
-describe("validate the checkbox functionality", () => {
-  it("validate the checkbox functionality with check", () => {
+describe("check the functionality", () => {
+  it("check the functionality of Roundtrip radio button", () => {
     cy.visit("https://www.spicejet.com/");
-    cy.get("#ctl00_mainContent_rbtnl_Trip_1").click();
-    cy.get('label[for="ctl00_mainContent_rbtnl_Trip_1"]').should(
-      "have.class",
-      "select-label"
+    cy.get('input[value="RoundTrip"]').as("roundTrip");
+    cy.get('input[value="OneWay"]').as("oneWay");
+    cy.get("@roundTrip").first().check();
+    cy.get("@roundTrip").should("be.checked");
+    cy.get("@oneWay").first().click();
+    cy.get("#ctl00_mainContent_rbtnl_Trip_1").should("not.be.checked");
+  });
+
+  it("verify the radio button is disabled or not", () => {
+    cy.visit(
+      "http://www.webdriveruniversity.com/Dropdown-Checkboxes-RadioButtons/index.html"
     );
+    cy.get('input[value="cabbage"]').should("be.disabled");
+    cy.get('input[value="pumpkin"]').should("not.be.disabled");
   });
 
-  it("validate the checkbox functinality with uncheck", () => {
-    cy.visit("https://www.spicejet.com/");
-    cy.get("#ctl00_mainContent_rbtnl_Trip_0").click();
-    cy.get('label[for="ctl00_mainContent_rbtnl_Trip_1"]').should(
-      "not.have.class",
-      "select-label"
+  it("validate the single checkbox", () => {
+    cy.visit(
+      "http://www.webdriveruniversity.com/Dropdown-Checkboxes-RadioButtons/index.html"
     );
+    cy.get('input[value="option-1"]').as("option-1");
+    cy.get("@option-1").check();
+    cy.get("@option-1").should("be.checked");
+    cy.get("@option-1").uncheck();
+    cy.get("@option-1").should("not.be.checked");
   });
 
-  it("validate the tick functionality with check", () => {
-    cy.visit("https://www.spicejet.com/");
-    cy.get("#ctl00_mainContent_chk_friendsandfamily").click();
-  });
-
-  it("validate the untick functionality with check", () => {
-    cy.visit("https://www.spicejet.com/");
-    cy.get("#ctl00_mainContent_chk_friendsandfamily").click();
-    cy.get('label[for="ctl00_mainContent_chk_friendsandfamily"]').should(
-      "not.have.text",
-      "Family & Friends"
+  it.only("verify the multiple checkboxes", () => {
+    cy.visit(
+      "http://www.webdriveruniversity.com/Dropdown-Checkboxes-RadioButtons/index.html"
     );
-  });
-  it("validate the cities trip", () => {
-    cy.visit("https://www.spicejet.com/");
-    cy.get("#ctl00_mainContent_ddl_originStation1_CTXTaction").click();
-    cy.get(
-      "#dropdownGroup1 > .dropdownDiv > :nth-child(2) > :nth-child(5) > a"
-    ).click();
-
-    cy.get("#ctl00_mainContent_ddl_destinationStation1_CTXTaction").click();
-
-    cy.get(
-      "#glsctl00_mainContent_ddl_destinationStation1_CTNR > #citydropdown > tbody > :nth-child(2) > .mapbg > .search_options_menucontent > #dropdownGroup1 > .dropdownDiv > :nth-child(1) > .city_selected > a"
-    ).click();
-  });
-  it("validate date ", () => {
-    cy.visit("https://www.spicejet.com/");
-
-    cy.get("#ctl00_mainContent_view_date1").click();
-    cy.get(":nth-child(4) > :nth-child(1) > .ui-state-default").click();
-    cy.get("#divpaxinfo").click();
-  });
-  it("traversing in spicejet", () => {
-    cy.visit("https://www.spicejet.com/");
-    cy.get('select[id="ctl00_mainContent_ddl_Child"]')
-      .children()
-      .should("have.length", "5");
-    cy.get('select[id="ctl00_mainContent_ddl_Child"]')
-      .children("option")
-      .eq(1)
-      .should("have.text", "1");
-  });
-  it("validate the currancy", () => {
-    cy.visit("https://www.spicejet.com/");
-    cy.get('select[id="ctl00_mainContent_DropDownListCurrency"]')
-      .children()
-      .should("have.length", "6");
-    cy.get('select[id="ctl00_mainContent_DropDownListCurrency"]')
-      .children("option")
-      .eq(3)
-      .should("have.text", "INR");
+    cy.get("#checkboxes")
+      .find("input")
+      .check(["option-1", "option-2", "option-3", "option-4"]);
   });
 });
